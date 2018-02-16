@@ -1,7 +1,28 @@
 *, *:before, *:after {
   box-sizing: content-box;
 }
-html {
-	margin: 0 auto;
+body {
   text-align: center;
+}
+table {
+	margin: 0 auto;
+}
+td {
+  width: 1em;
+  height: 1em;
+}
+.m {
+  background: Black;
+}
+.r {
+  background: Gray;
+}
+.p {
+  background: LightGray;
+}
+.c {
+  background: Red;
+}
+span.caminho {
+  color: Green;
 }

@@ -42,6 +42,22 @@ window.mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm']
 ]
+const body = document.getElementsByTagName('body')[0]
+const table = document.createElement('table')
+const tbody = document.createElement('tbody')
+for (let i = 0; i < window.mapa.length; i++) {
+  const tr = document.createElement('tr')
+  for (let j = 0; j < window.mapa[0].length; j++) {
+    const td = document.createElement('td')
+    td.setAttribute('id', `[${i},${j}]`)
+    const classe = isFinite(window.mapa[i][j]) ? 'c' : window.mapa[i][j]
+    td.setAttribute('class', classe)
+    tr.appendChild(td)
+  }
+  tbody.appendChild(tr)
+}
+table.appendChild(tbody)
+body.appendChild(table)
 
 window.inicio = [37, 37]
 window.fim = [4, 37]
@@ -141,3 +157,10 @@ while (window.fila.length > 0) {
   }
 }
 console.log(`terminou em ${Date.now() - window.t0} milisegundos`)
+
+window.caminhos[window.keyner(window.fim)].percurso.forEach(e => {
+  const span = document.createElement('span')
+  span.setAttribute('class', 'caminho')
+  span.innerHTML = 'x'
+  document.getElementById(window.keyner(e)).appendChild(span)
+})
