@@ -130,8 +130,7 @@ window.caminhos[window.keyner(window.inicio)] = {
   distancia: 0,
   percurso: [window.inicio]
 }
-/*
-window.t0 = Date.now()
+
 while (window.fila.length > 0) {
   let noIJ = window.fila.shift()
   let no = window.caminhos[window.keyner(noIJ)]
@@ -157,7 +156,6 @@ while (window.fila.length > 0) {
     }
   }
 }
-console.log(`terminou em ${Date.now() - window.t0} milisegundos`)
 
 window.caminhos[window.keyner(window.fim)].percurso.forEach(e => {
   const span = document.createElement('span')
@@ -165,7 +163,7 @@ window.caminhos[window.keyner(window.fim)].percurso.forEach(e => {
   span.innerHTML = 'x'
   document.getElementById(window.keyner(e)).appendChild(span)
 })
-*/
+
 window.cavaleiros = [
   {
     nome: 'Seiya',
@@ -190,18 +188,18 @@ window.cavaleiros = [
 ]
 
 window.casas = [
-  [window.cavaleiros[0], window.cavaleiros[1]], // casa 0
-  [window.cavaleiros[1], window.cavaleiros[2]], // casa 1
-  [window.cavaleiros[2], window.cavaleiros[3]], // casa 2
-  [window.cavaleiros[3], window.cavaleiros[4]],
-  [window.cavaleiros[4], window.cavaleiros[0]],
-  [window.cavaleiros[0], window.cavaleiros[1]],
-  [window.cavaleiros[1], window.cavaleiros[2]],
-  [window.cavaleiros[2], window.cavaleiros[3]],
-  [window.cavaleiros[3], window.cavaleiros[4]],
-  [window.cavaleiros[4], window.cavaleiros[0]],
-  [window.cavaleiros[0], window.cavaleiros[1]],
-  [window.cavaleiros[1], window.cavaleiros[2]]
+  [window.cavaleiros[0], window.cavaleiros[1], window.cavaleiros[2], window.cavaleiros[3], window.cavaleiros[4]], // casa 0
+  [window.cavaleiros[0], window.cavaleiros[1], window.cavaleiros[2], window.cavaleiros[3], window.cavaleiros[4]], // casa 1
+  [window.cavaleiros[0], window.cavaleiros[1], window.cavaleiros[2], window.cavaleiros[3], window.cavaleiros[4]], // casa 2
+  [window.cavaleiros[4]],
+  [window.cavaleiros[4]],
+  [window.cavaleiros[3]],
+  [window.cavaleiros[3]],
+  [window.cavaleiros[2]],
+  [window.cavaleiros[2]],
+  [window.cavaleiros[1]],
+  [window.cavaleiros[1]],
+  [window.cavaleiros[0]] // casa 11
 ]
 
 window.dificuldadeCasas = [
@@ -218,7 +216,24 @@ window.dificuldadeCasas = [
   110,
   120
 ]
-function moveCavaleiroRandom (casas) {
+window.moveCavaleiro = function moveCavaleiro (casas, cao, cvo, cad) {
+  console.log(`casas[${cao}][${cvo}] --> casas[${cad}]`)
+
+  const origenFiltrada = casas[cao].filter((el, idx) => idx !== cvo)
+  const novoDestino = casas[cad].slice()
+  novoDestino.push(casas[cao][cvo])
+
+  return casas.map((el, idx) => {
+    if (idx === cao) {
+      return origenFiltrada
+    } else if (idx === cad) {
+      return novoDestino
+    } else {
+      return el
+    }
+  })
+}
+window.moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
   let casaOrigem
   // a origem não pode ser uma casa com apenas 1 cavaleiro
   while (casas[casaOrigem = Math.floor(casas.length * Math.random())].length === 1);
@@ -231,9 +246,9 @@ function moveCavaleiroRandom (casas) {
     casas[casaDestino = Math.floor(casas.length * Math.random())].find(el => el === casas[casaOrigem][cavaleiroOrigem]) ||
     casas[casaDestino].length === 5);
 
-  console.log(`casas[${casaOrigem}][${cavaleiroOrigem}] --> casas[${casaDestino}]`)
+  // console.log(`casas[${casaOrigem}][${cavaleiroOrigem}] --> casas[${casaDestino}]`)
 
-  const origenFiltrada = casas[casaOrigem].filter((el, idx) => idx === cavaleiroOrigem)
+  const origenFiltrada = casas[casaOrigem].filter((el, idx) => idx !== cavaleiroOrigem)
   const novoDestino = casas[casaDestino].slice()
   novoDestino.push(casas[casaOrigem][cavaleiroOrigem])
 
@@ -246,4 +261,56 @@ function moveCavaleiroRandom (casas) {
       return el
     }
   })
+}
+
+window.tempoBatalha = function tempoBatalha (casas) {
+  return casas.reduce((a, b, i) => a + window.dificuldadeCasas[i] / b.reduce((a, b) => a + b.cosmos, 0), 0)
+}
+
+window.darwin = []
+for (let i = 0; i < 5; i++) {
+  window.casasAcc = window.moveCavaleiroRandom(window.casas)
+  window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
+  window.darwin.push({
+    tempoBatalha: window.tempoBatalhaAcc,
+    casas: window.casasAcc
+  })
+}
+window.darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+
+while (window.darwin[1].tempoBatalha - window.darwin[0].tempoBatalha > 0.01) {
+  window.darwin = window.darwin.slice(0, 5)
+  for (let i = 0; i < 5; i++) {
+    window.casasAcc = window.moveCavaleiroRandom(window.darwin[0].casas)
+    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
+    window.darwin.push({
+      tempoBatalha: window.tempoBatalhaAcc,
+      casas: window.casasAcc
+    })
+    window.casasAcc = window.moveCavaleiroRandom(window.darwin[1].casas)
+    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
+    window.darwin.push({
+      tempoBatalha: window.tempoBatalhaAcc,
+      casas: window.casasAcc
+    })
+    window.casasAcc = window.moveCavaleiroRandom(window.darwin[2].casas)
+    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
+    window.darwin.push({
+      tempoBatalha: window.tempoBatalhaAcc,
+      casas: window.casasAcc
+    })
+    window.casasAcc = window.moveCavaleiroRandom(window.darwin[3].casas)
+    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
+    window.darwin.push({
+      tempoBatalha: window.tempoBatalhaAcc,
+      casas: window.casasAcc
+    })
+    window.casasAcc = window.moveCavaleiroRandom(window.darwin[4].casas)
+    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
+    window.darwin.push({
+      tempoBatalha: window.tempoBatalhaAcc,
+      casas: window.casasAcc
+    })
+  }
+  window.darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
 }
