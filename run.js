@@ -42,9 +42,9 @@ window.mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm']
 ]
-const body = document.getElementsByTagName('body')[0]
-const table = document.createElement('table')
-const tbody = document.createElement('tbody')
+window.body = document.getElementsByTagName('body')[0]
+window.table = document.createElement('table')
+window.tbody = document.createElement('tbody')
 for (let i = 0; i < window.mapa.length; i++) {
   const tr = document.createElement('tr')
   for (let j = 0; j < window.mapa[0].length; j++) {
@@ -54,10 +54,10 @@ for (let i = 0; i < window.mapa.length; i++) {
     td.setAttribute('class', classe)
     tr.appendChild(td)
   }
-  tbody.appendChild(tr)
+  window.tbody.appendChild(tr)
 }
-table.appendChild(tbody)
-body.appendChild(table)
+window.table.appendChild(window.tbody)
+window.body.appendChild(window.table)
 
 window.inicio = [37, 37]
 window.fim = [4, 37]
@@ -277,7 +277,7 @@ for (let i = 0; i < 5; i++) {
   })
 }
 window.darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
-
+window.count = 0
 while (window.darwin[1].tempoBatalha - window.darwin[0].tempoBatalha > 0.01) {
   window.darwin = window.darwin.slice(0, 5)
   for (let i = 0; i < 5; i++) {
@@ -313,4 +313,13 @@ while (window.darwin[1].tempoBatalha - window.darwin[0].tempoBatalha > 0.01) {
     })
   }
   window.darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+  window.count++
 }
+
+window.ol = document.createElement('ol')
+window.darwin[0].casas.forEach(el => {
+  let li = document.createElement('li')
+  li.innerText = el.reduce((a, b) => a + b.nome + ' ', '')
+  window.ol.appendChild(li)
+})
+window.body.appendChild(window.ol)
