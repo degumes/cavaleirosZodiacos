@@ -130,6 +130,7 @@ window.caminhos[window.keyner(window.inicio)] = {
   distancia: 0,
   percurso: [window.inicio]
 }
+/*
 window.t0 = Date.now()
 while (window.fila.length > 0) {
   let noIJ = window.fila.shift()
@@ -164,3 +165,85 @@ window.caminhos[window.keyner(window.fim)].percurso.forEach(e => {
   span.innerHTML = 'x'
   document.getElementById(window.keyner(e)).appendChild(span)
 })
+*/
+window.cavaleiros = [
+  {
+    nome: 'Seiya',
+    cosmos: 1.5
+  },
+  {
+    nome: 'Shiryu',
+    cosmos: 1.4
+  },
+  {
+    nome: 'Hyoga',
+    cosmos: 1.3
+  },
+  {
+    nome: 'Shun',
+    cosmos: 1.2
+  },
+  {
+    nome: 'Ikki',
+    cosmos: 1.1
+  }
+]
+
+window.casas = [
+  [window.cavaleiros[0], window.cavaleiros[1]], // casa 0
+  [window.cavaleiros[1], window.cavaleiros[2]], // casa 1
+  [window.cavaleiros[2], window.cavaleiros[3]], // casa 2
+  [window.cavaleiros[3], window.cavaleiros[4]],
+  [window.cavaleiros[4], window.cavaleiros[0]],
+  [window.cavaleiros[0], window.cavaleiros[1]],
+  [window.cavaleiros[1], window.cavaleiros[2]],
+  [window.cavaleiros[2], window.cavaleiros[3]],
+  [window.cavaleiros[3], window.cavaleiros[4]],
+  [window.cavaleiros[4], window.cavaleiros[0]],
+  [window.cavaleiros[0], window.cavaleiros[1]],
+  [window.cavaleiros[1], window.cavaleiros[2]]
+]
+
+window.dificuldadeCasas = [
+  50,
+  55,
+  60,
+  70,
+  75,
+  80,
+  85,
+  90,
+  95,
+  100,
+  110,
+  120
+]
+function moveCavaleiroRandom (casas) {
+  let casaOrigem
+  // a origem não pode ser uma casa com apenas 1 cavaleiro
+  while (casas[casaOrigem = Math.floor(casas.length * Math.random())].length === 1);
+  let cavaleiroOrigem = Math.floor(casas[casaOrigem].length * Math.random())
+
+  let casaDestino
+  // o destino não pode ser uma casa que já possui o cavaleiro de origem
+  // O destino não pode ter 5 cavaleiros
+  while (
+    casas[casaDestino = Math.floor(casas.length * Math.random())].find(el => el === casas[casaOrigem][cavaleiroOrigem]) ||
+    casas[casaDestino].length === 5);
+
+  console.log(`casas[${casaOrigem}][${cavaleiroOrigem}] --> casas[${casaDestino}]`)
+
+  const origenFiltrada = casas[casaOrigem].filter((el, idx) => idx === cavaleiroOrigem)
+  const novoDestino = casas[casaDestino].slice()
+  novoDestino.push(casas[casaOrigem][cavaleiroOrigem])
+
+  return casas.map((el, idx) => {
+    if (idx === casaOrigem) {
+      return origenFiltrada
+    } else if (idx === casaDestino) {
+      return novoDestino
+    } else {
+      return el
+    }
+  })
+}
