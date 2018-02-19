@@ -42,6 +42,9 @@ const mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm']
 ]
+
+/*
+*/
 const table = document.createElement('table')
 const tbody = document.createElement('tbody')
 for (let i = 0; i < mapa.length; i++) {
@@ -51,12 +54,77 @@ for (let i = 0; i < mapa.length; i++) {
     td.setAttribute('id', `[${i},${j}]`)
     const classe = isFinite(mapa[i][j]) ? 'c' : mapa[i][j]
     td.setAttribute('class', classe)
+    td.onclick = function (e) {
+      const id = e.srcElement.id
+      const i = id.slice(1).split(',')[0]
+      const j = id.split(',')[1].slice(0, -1)
+
+      //
+      const terreno = mapa[i][j]
+      if (terreno === 'p') {
+        mapa[i][j] = 'r'
+        document.getElementById(`[${i},${j}]`).setAttribute('class', 'r')
+      } else if (terreno === 'r') {
+        mapa[i][j] = 'p'
+        document.getElementById(`[${i},${j}]`).setAttribute('class', 'p')
+      }
+      // deu bastante certo,
+      // mas tem uns bugs
+      // vou comitar pra vc ver
+    }
     tr.appendChild(td)
   }
   tbody.appendChild(tr)
 }
 table.appendChild(tbody)
 document.body.appendChild(table)
+
+/*
+sim
+
+instala o nodejs também
+é maravilha
+javascript no servidor
+
+*/
+const botao = document.createElement('button')
+botao.onclick = function () {
+  // aqui eu boto o while
+  while (fila.length > 0) {
+    let noIJ = fila.shift()
+    let no = caminhos[keyner(noIJ)]
+    for (const p of proximos(noIJ)) {
+      const strp = keyner(p)
+      const tamp = tamanho(p)
+      if (Object.keys(caminhos).includes(strp)) {
+        if (caminhos[strp].distancia > no.distancia + tamp) {
+          caminhos[strp] = {
+            distancia: no.distancia + tamp,
+            percurso: no.percurso.slice()
+          }
+          caminhos[strp].percurso.push(p)
+          fila.push(p)
+        }
+      } else {
+        caminhos[strp] = {
+          distancia: no.distancia + tamp,
+          percurso: no.percurso.slice()
+        }
+        caminhos[strp].percurso.push(p)
+        fila.push(p)
+      }
+    }
+  }
+
+  caminhos[keyner(fim)].percurso.forEach(e => {
+    const span = document.createElement('span')
+    span.setAttribute('class', 'caminho')
+    span.innerHTML = '&bull;'
+    document.getElementById(keyner(e)).appendChild(span)
+  })
+}
+botao.innerHTML = '<span>começar a jornada</span>'
+document.body.appendChild(botao)
 
 const inicio = [37, 37]
 const fim = [4, 37]
@@ -139,35 +207,12 @@ caminhos[keyner(inicio)] = {
   percurso: [inicio]
 }
 
-while (fila.length > 0) {
-  let noIJ = fila.shift()
-  let no = caminhos[keyner(noIJ)]
-  for (const p of proximos(noIJ)) {
-    const strp = keyner(p)
-    const tamp = tamanho(p)
-    if (Object.keys(caminhos).includes(strp)) {
-      if (caminhos[strp].distancia > no.distancia + tamp) {
-        caminhos[strp] = {
-          distancia: no.distancia + tamp,
-          percurso: no.percurso.slice()
-        }
-        caminhos[strp].percurso.push(p)
-        fila.push(p)
-      }
-    } else {
-      caminhos[strp] = {
-        distancia: no.distancia + tamp,
-        percurso: no.percurso.slice()
-      }
-      caminhos[strp].percurso.push(p)
-      fila.push(p)
-    }
-  }
-}
+/*
+  esse while vai ficar dentro do botão
 
-caminhos[keyner(fim)].percurso.forEach(e => {
-  const span = document.createElement('span')
-  span.setAttribute('class', 'caminho')
-  span.innerHTML = '&bull;'
-  document.getElementById(keyner(e)).appendChild(span)
-})
+  a parte de cima tem várias definições de funções que dentro do while usa
+
+  elas podem ficar soltas
+
+  vamos pra cima
+*/
