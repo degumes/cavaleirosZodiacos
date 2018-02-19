@@ -88,7 +88,7 @@ Queue.prototype.shift = function () {
 const proximos = function proximos ([i, j]) {
   const proximos = []
   let vz
-  if (j < mapa.length) {
+  if (j < mapa.length - 1) {
     let vz = mapa[i][j + 1]
     if (vz === 'p' || vz === 'r' || isFinite(vz)) {
       proximos.push([i, j + 1])
@@ -100,7 +100,7 @@ const proximos = function proximos ([i, j]) {
       proximos.push([i, j - 1])
     }
   }
-  if (i < mapa.length) {
+  if (i < mapa.length - 1) {
     vz = mapa[i + 1][j]
     if (vz === 'p' || vz === 'r' || isFinite(vz)) {
       proximos.push([i + 1, j])
