@@ -43,55 +43,6 @@ const mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm']
 ]
 
-/*
-*/
-const table = document.createElement('table')
-const tbody = document.createElement('tbody')
-for (let i = 0; i < mapa.length; i++) {
-  const tr = document.createElement('tr')
-  for (let j = 0; j < mapa[0].length; j++) {
-    const td = document.createElement('td')
-    td.setAttribute('id', `[${i},${j}]`)
-    const classe = isFinite(mapa[i][j]) ? 'c' : mapa[i][j]
-    td.setAttribute('class', classe)
-    td.onclick = function (e) {
-      const id = e.srcElement.id
-      const i = id.slice(1).split(',')[0]
-      const j = id.split(',')[1].slice(0, -1)
-
-      //
-      const terreno = mapa[i][j]
-      if (terreno === 'p') {
-        mapa[i][j] = 'r'
-        document.getElementById(`[${i},${j}]`).setAttribute('class', 'r')
-      } else if (terreno === 'r') {
-        mapa[i][j] = 'p'
-        document.getElementById(`[${i},${j}]`).setAttribute('class', 'p')
-      }
-      // publiquei
-      // olha lá no deg
-    }
-    tr.appendChild(td)
-  }
-  tbody.appendChild(tr)
-}
-table.appendChild(tbody)
-document.body.appendChild(table)
-
-const botao = document.createElement('button')
-botao.onclick = function (el) {
-  el.srcElement.parentNode.style = 'display:none;'
-  setTimeout(() => {
-    andarNoMapa()
-    desenharNoMapa()
-    batalharNasCasas()
-    desenharNaLista()
-    imprimeSomaTempo()
-  }, 0)
-}
-botao.innerHTML = '<span>começar a jornada</span>'
-document.body.appendChild(botao)
-
 const inicio = [37, 37]
 const fim = [4, 37]
 
