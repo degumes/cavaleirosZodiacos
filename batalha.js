@@ -98,26 +98,30 @@ for (let i = 0; i < 5; i++) {
 }
 darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
 
-while (darwin[0].tempoBatalha !== darwin[4].tempoBatalha) {
-  for (let i = 0; i < 5; i++) {
-    const gen1 = moveCavaleiroRandom(darwin[i].casas)
-    for (let j = 0; j < 150; j++) {
-      const casasAcc = moveCavaleiroRandom(gen1)
-      const tempoBatalhaAcc = tempoBatalha(casasAcc)
-      darwin.push({
-        tempoBatalha: tempoBatalhaAcc,
-        casas: casasAcc
-      })
+const batalharNasCasas = function batalharNasCasas () {
+  while (darwin[0].tempoBatalha !== darwin[4].tempoBatalha) {
+    for (let i = 0; i < 5; i++) {
+      const gen1 = moveCavaleiroRandom(darwin[i].casas)
+      for (let j = 0; j < 150; j++) {
+        const casasAcc = moveCavaleiroRandom(gen1)
+        const tempoBatalhaAcc = tempoBatalha(casasAcc)
+        darwin.push({
+          tempoBatalha: tempoBatalhaAcc,
+          casas: casasAcc
+        })
+      }
     }
+    darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+    darwin = darwin.slice(0, 5)
   }
-  darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
-  darwin = darwin.slice(0, 5)
 }
 
-const ol = document.createElement('ol')
-darwin[0].casas.forEach(el => {
-  const li = document.createElement('li')
-  li.innerText = el.reduce((a, b) => a + b.nome + ' ', '')
-  ol.appendChild(li)
-})
-document.body.appendChild(ol)
+const desenharNaLista = function desenharNaLista () {
+  const ol = document.createElement('ol')
+  darwin[0].casas.forEach(el => {
+    const li = document.createElement('li')
+    li.innerText = el.reduce((a, b) => a + b.nome + ' ', '')
+    ol.appendChild(li)
+  })
+  document.body.appendChild(ol)  
+}

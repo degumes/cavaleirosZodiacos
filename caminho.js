@@ -68,9 +68,8 @@ for (let i = 0; i < mapa.length; i++) {
         mapa[i][j] = 'p'
         document.getElementById(`[${i},${j}]`).setAttribute('class', 'p')
       }
-      // deu bastante certo,
-      // mas tem uns bugs
-      // vou comitar pra vc ver
+      // publiquei
+      // olha lá no deg
     }
     tr.appendChild(td)
   }
@@ -79,49 +78,16 @@ for (let i = 0; i < mapa.length; i++) {
 table.appendChild(tbody)
 document.body.appendChild(table)
 
-/*
-sim
-
-instala o nodejs também
-é maravilha
-javascript no servidor
-
-*/
 const botao = document.createElement('button')
-botao.onclick = function () {
-  // aqui eu boto o while
-  while (fila.length > 0) {
-    let noIJ = fila.shift()
-    let no = caminhos[keyner(noIJ)]
-    for (const p of proximos(noIJ)) {
-      const strp = keyner(p)
-      const tamp = tamanho(p)
-      if (Object.keys(caminhos).includes(strp)) {
-        if (caminhos[strp].distancia > no.distancia + tamp) {
-          caminhos[strp] = {
-            distancia: no.distancia + tamp,
-            percurso: no.percurso.slice()
-          }
-          caminhos[strp].percurso.push(p)
-          fila.push(p)
-        }
-      } else {
-        caminhos[strp] = {
-          distancia: no.distancia + tamp,
-          percurso: no.percurso.slice()
-        }
-        caminhos[strp].percurso.push(p)
-        fila.push(p)
-      }
-    }
-  }
-
-  caminhos[keyner(fim)].percurso.forEach(e => {
-    const span = document.createElement('span')
-    span.setAttribute('class', 'caminho')
-    span.innerHTML = '&bull;'
-    document.getElementById(keyner(e)).appendChild(span)
-  })
+botao.onclick = function (el) {
+  el.srcElement.parentNode.style = 'display:none;'
+  setTimeout(() => {
+    andarNoMapa()
+    desenharNoMapa()
+    batalharNasCasas()
+    desenharNaLista()
+    imprimeSomaTempo()
+  }, 0)
 }
 botao.innerHTML = '<span>começar a jornada</span>'
 document.body.appendChild(botao)
@@ -207,12 +173,38 @@ caminhos[keyner(inicio)] = {
   percurso: [inicio]
 }
 
-/*
-  esse while vai ficar dentro do botão
-
-  a parte de cima tem várias definições de funções que dentro do while usa
-
-  elas podem ficar soltas
-
-  vamos pra cima
-*/
+const andarNoMapa = function andarNoMapa () {
+  while (fila.length > 0) {
+    let noIJ = fila.shift()
+    let no = caminhos[keyner(noIJ)]
+    for (const p of proximos(noIJ)) {
+      const strp = keyner(p)
+      const tamp = tamanho(p)
+      if (Object.keys(caminhos).includes(strp)) {
+        if (caminhos[strp].distancia > no.distancia + tamp) {
+          caminhos[strp] = {
+            distancia: no.distancia + tamp,
+            percurso: no.percurso.slice()
+          }
+          caminhos[strp].percurso.push(p)
+          fila.push(p)
+        }
+      } else {
+        caminhos[strp] = {
+          distancia: no.distancia + tamp,
+          percurso: no.percurso.slice()
+        }
+        caminhos[strp].percurso.push(p)
+        fila.push(p)
+      }
+    }
+  }
+}
+const desenharNoMapa = function desenharNoMapa () {
+  caminhos[keyner(fim)].percurso.forEach(e => {
+    const span = document.createElement('span')
+    span.setAttribute('class', 'caminho')
+    span.innerHTML = '&bull;'
+    document.getElementById(keyner(e)).appendChild(span)
+  })
+}
