@@ -1,4 +1,4 @@
-window.mapa = [
+const mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
@@ -42,31 +42,30 @@ window.mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm']
 ]
-window.body = document.getElementsByTagName('body')[0]
-window.table = document.createElement('table')
-window.tbody = document.createElement('tbody')
-for (let i = 0; i < window.mapa.length; i++) {
+const table = document.createElement('table')
+const tbody = document.createElement('tbody')
+for (let i = 0; i < mapa.length; i++) {
   const tr = document.createElement('tr')
-  for (let j = 0; j < window.mapa[0].length; j++) {
+  for (let j = 0; j < mapa[0].length; j++) {
     const td = document.createElement('td')
     td.setAttribute('id', `[${i},${j}]`)
-    const classe = isFinite(window.mapa[i][j]) ? 'c' : window.mapa[i][j]
+    const classe = isFinite(mapa[i][j]) ? 'c' : mapa[i][j]
     td.setAttribute('class', classe)
     tr.appendChild(td)
   }
-  window.tbody.appendChild(tr)
+  tbody.appendChild(tr)
 }
-window.table.appendChild(window.tbody)
-window.body.appendChild(window.table)
+table.appendChild(tbody)
+document.body.appendChild(table)
 
-window.inicio = [37, 37]
-window.fim = [4, 37]
+const inicio = [37, 37]
+const fim = [4, 37]
 
 // https://github.com/nolanlawson/tiny-queue
-window.Queue = function Queue () {
+const Queue = function Queue () {
   this.length = 0
 }
-window.Queue.prototype.push = function (item) {
+Queue.prototype.push = function (item) {
   var node = {item: item}
   if (this.last) {
     this.last = this.last.next = node
@@ -75,7 +74,7 @@ window.Queue.prototype.push = function (item) {
   }
   this.length++
 }
-window.Queue.prototype.shift = function () {
+Queue.prototype.shift = function () {
   var node = this.first
   if (node) {
     this.first = node.next
@@ -86,29 +85,38 @@ window.Queue.prototype.shift = function () {
   }
 }
 
-window.proximos = function proximos ([i, j]) {
+const proximos = function proximos ([i, j]) {
   const proximos = []
-  let vz = window.mapa[i][j + 1]
-  if (vz === 'p' || vz === 'r' || isFinite(vz)) {
-    proximos.push([i, j + 1])
+  let vz
+  if (j < mapa.length) {
+    let vz = mapa[i][j + 1]
+    if (vz === 'p' || vz === 'r' || isFinite(vz)) {
+      proximos.push([i, j + 1])
+    }
   }
-  vz = window.mapa[i][j - 1]
-  if (vz === 'p' || vz === 'r' || isFinite(vz)) {
-    proximos.push([i, j - 1])
+  if (j > 0) {
+    vz = mapa[i][j - 1]
+    if (vz === 'p' || vz === 'r' || isFinite(vz)) {
+      proximos.push([i, j - 1])
+    }
   }
-  vz = window.mapa[i + 1][j]
-  if (vz === 'p' || vz === 'r' || isFinite(vz)) {
-    proximos.push([i + 1, j])
+  if (i < mapa.length) {
+    vz = mapa[i + 1][j]
+    if (vz === 'p' || vz === 'r' || isFinite(vz)) {
+      proximos.push([i + 1, j])
+    }
   }
-  vz = window.mapa[i - 1][j]
-  if (vz === 'p' || vz === 'r' || isFinite(vz)) {
-    proximos.push([i - 1, j])
+  if (i > 0) {
+    vz = mapa[i - 1][j]
+    if (vz === 'p' || vz === 'r' || isFinite(vz)) {
+      proximos.push([i - 1, j])
+    }
   }
   return proximos
 }
 
-window.tamanho = function tamanho ([i, j]) {
-  const t = window.mapa[i][j]
+const tamanho = function tamanho ([i, j]) {
+  const t = mapa[i][j]
   if (isFinite(t)) {
     return 0
   } else if (t === 'p') {
@@ -120,46 +128,46 @@ window.tamanho = function tamanho ([i, j]) {
   }
 }
 
-window.keyner = function keyner ([i, j]) {
+const keyner = function keyner ([i, j]) {
   return `[${i},${j}]`
 }
-window.fila = new window.Queue()
-window.fila.push(window.inicio)
-window.caminhos = {}
-window.caminhos[window.keyner(window.inicio)] = {
+const fila = new Queue()
+fila.push(inicio)
+const caminhos = {}
+caminhos[keyner(inicio)] = {
   distancia: 0,
-  percurso: [window.inicio]
+  percurso: [inicio]
 }
 
-while (window.fila.length > 0) {
-  let noIJ = window.fila.shift()
-  let no = window.caminhos[window.keyner(noIJ)]
-  for (const p of window.proximos(noIJ)) {
-    const strp = window.keyner(p)
-    const tamp = window.tamanho(p)
-    if (Object.keys(window.caminhos).includes(strp)) {
-      if (window.caminhos[strp].distancia > no.distancia + tamp) {
-        window.caminhos[strp] = {
+while (fila.length > 0) {
+  let noIJ = fila.shift()
+  let no = caminhos[keyner(noIJ)]
+  for (const p of proximos(noIJ)) {
+    const strp = keyner(p)
+    const tamp = tamanho(p)
+    if (Object.keys(caminhos).includes(strp)) {
+      if (caminhos[strp].distancia > no.distancia + tamp) {
+        caminhos[strp] = {
           distancia: no.distancia + tamp,
           percurso: no.percurso.slice()
         }
-        window.caminhos[strp].percurso.push(p)
-        window.fila.push(p)
+        caminhos[strp].percurso.push(p)
+        fila.push(p)
       }
     } else {
-      window.caminhos[strp] = {
+      caminhos[strp] = {
         distancia: no.distancia + tamp,
         percurso: no.percurso.slice()
       }
-      window.caminhos[strp].percurso.push(p)
-      window.fila.push(p)
+      caminhos[strp].percurso.push(p)
+      fila.push(p)
     }
   }
 }
 
-window.caminhos[window.keyner(window.fim)].percurso.forEach(e => {
+caminhos[keyner(fim)].percurso.forEach(e => {
   const span = document.createElement('span')
   span.setAttribute('class', 'caminho')
-  span.innerHTML = 'x'
-  document.getElementById(window.keyner(e)).appendChild(span)
+  span.innerHTML = '&bull;'
+  document.getElementById(keyner(e)).appendChild(span)
 })

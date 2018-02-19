@@ -1,4 +1,4 @@
-window.cavaleiros = [
+const cavaleiros = [
   {
     nome: 'Seiya',
     cosmos: 1.5
@@ -21,22 +21,23 @@ window.cavaleiros = [
   }
 ]
 
-window.casas = [
-  [window.cavaleiros[0], window.cavaleiros[1], window.cavaleiros[2], window.cavaleiros[3], window.cavaleiros[4]], // casa 0
-  [window.cavaleiros[0], window.cavaleiros[1], window.cavaleiros[2], window.cavaleiros[3], window.cavaleiros[4]], // casa 1
-  [window.cavaleiros[0], window.cavaleiros[1], window.cavaleiros[2], window.cavaleiros[3], window.cavaleiros[4]], // casa 2
-  [window.cavaleiros[4]],
-  [window.cavaleiros[4]],
-  [window.cavaleiros[3]],
-  [window.cavaleiros[3]],
-  [window.cavaleiros[2]],
-  [window.cavaleiros[2]],
-  [window.cavaleiros[1]],
-  [window.cavaleiros[1]],
-  [window.cavaleiros[0]] // casa 11
+const casas = [
+  [cavaleiros[0], cavaleiros[1], cavaleiros[2], cavaleiros[3], cavaleiros[4]], // casa 0
+  [cavaleiros[0], cavaleiros[1], cavaleiros[2], cavaleiros[3], cavaleiros[4]], // casa 1
+  [cavaleiros[0], cavaleiros[1], cavaleiros[2], cavaleiros[3], cavaleiros[4]], // casa 2
+  [cavaleiros[4]],
+  [cavaleiros[4]],
+  [cavaleiros[3]],
+  [cavaleiros[3]],
+  [cavaleiros[2]],
+  [cavaleiros[2]],
+  [cavaleiros[1]],
+  [cavaleiros[1]],
+  [cavaleiros[0]],
+  [cavaleiros[0]]// casa 11
 ]
 
-window.dificuldadeCasas = [
+const dificuldadeCasas = [
   50,
   55,
   60,
@@ -48,30 +49,15 @@ window.dificuldadeCasas = [
   95,
   100,
   110,
-  120
+  120,
+  0
 ]
-window.moveCavaleiro = function moveCavaleiro (casas, cao, cvo, cad) {
-  console.log(`casas[${cao}][${cvo}] --> casas[${cad}]`)
 
-  const origenFiltrada = casas[cao].filter((el, idx) => idx !== cvo)
-  const novoDestino = casas[cad].slice()
-  novoDestino.push(casas[cao][cvo])
-
-  return casas.map((el, idx) => {
-    if (idx === cao) {
-      return origenFiltrada
-    } else if (idx === cad) {
-      return novoDestino
-    } else {
-      return el
-    }
-  })
-}
-window.moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
+const moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
   let casaOrigem
   // a origem não pode ser uma casa com apenas 1 cavaleiro
   while (casas[casaOrigem = Math.floor(casas.length * Math.random())].length === 1);
-  let cavaleiroOrigem = Math.floor(casas[casaOrigem].length * Math.random())
+  const cavaleiroOrigem = Math.floor(casas[casaOrigem].length * Math.random())
 
   let casaDestino
   // o destino não pode ser uma casa que já possui o cavaleiro de origem
@@ -97,63 +83,41 @@ window.moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
   })
 }
 
-window.tempoBatalha = function tempoBatalha (casas) {
-  return casas.reduce((a, b, i) => a + window.dificuldadeCasas[i] / b.reduce((a, b) => a + b.cosmos, 0), 0)
+const tempoBatalha = function tempoBatalha (casas) {
+  return casas.reduce((a, b, i) => a + dificuldadeCasas[i] / b.reduce((a, b) => a + b.cosmos, 0), 0)
 }
 
-window.darwin = []
+let darwin = []
 for (let i = 0; i < 5; i++) {
-  window.casasAcc = window.moveCavaleiroRandom(window.casas)
-  window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
-  window.darwin.push({
-    tempoBatalha: window.tempoBatalhaAcc,
-    casas: window.casasAcc
+  const casasAcc = moveCavaleiroRandom(casas)
+  const tempoBatalhaAcc = tempoBatalha(casasAcc)
+  darwin.push({
+    tempoBatalha: tempoBatalhaAcc,
+    casas: casasAcc
   })
 }
-window.darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
-window.count = 0
-while (window.darwin[1].tempoBatalha - window.darwin[0].tempoBatalha > 0.01) {
-  window.darwin = window.darwin.slice(0, 5)
+darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+
+while (darwin[0].tempoBatalha !== darwin[4].tempoBatalha) {
   for (let i = 0; i < 5; i++) {
-    window.casasAcc = window.moveCavaleiroRandom(window.darwin[0].casas)
-    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
-    window.darwin.push({
-      tempoBatalha: window.tempoBatalhaAcc,
-      casas: window.casasAcc
-    })
-    window.casasAcc = window.moveCavaleiroRandom(window.darwin[1].casas)
-    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
-    window.darwin.push({
-      tempoBatalha: window.tempoBatalhaAcc,
-      casas: window.casasAcc
-    })
-    window.casasAcc = window.moveCavaleiroRandom(window.darwin[2].casas)
-    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
-    window.darwin.push({
-      tempoBatalha: window.tempoBatalhaAcc,
-      casas: window.casasAcc
-    })
-    window.casasAcc = window.moveCavaleiroRandom(window.darwin[3].casas)
-    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
-    window.darwin.push({
-      tempoBatalha: window.tempoBatalhaAcc,
-      casas: window.casasAcc
-    })
-    window.casasAcc = window.moveCavaleiroRandom(window.darwin[4].casas)
-    window.tempoBatalhaAcc = window.tempoBatalha(window.casasAcc)
-    window.darwin.push({
-      tempoBatalha: window.tempoBatalhaAcc,
-      casas: window.casasAcc
-    })
+    const gen1 = moveCavaleiroRandom(darwin[i].casas)
+    for (let j = 0; j < 150; j++) {
+      const casasAcc = moveCavaleiroRandom(gen1)
+      const tempoBatalhaAcc = tempoBatalha(casasAcc)
+      darwin.push({
+        tempoBatalha: tempoBatalhaAcc,
+        casas: casasAcc
+      })
+    }
   }
-  window.darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
-  window.count++
+  darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+  darwin = darwin.slice(0, 5)
 }
 
-window.ol = document.createElement('ol')
-window.darwin[0].casas.forEach(el => {
-  let li = document.createElement('li')
+const ol = document.createElement('ol')
+darwin[0].casas.forEach(el => {
+  const li = document.createElement('li')
   li.innerText = el.reduce((a, b) => a + b.nome + ' ', '')
-  window.ol.appendChild(li)
+  ol.appendChild(li)
 })
-window.body.appendChild(window.ol)
+document.body.appendChild(ol)
