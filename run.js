@@ -6,6 +6,39 @@
 // obs, use botao.setAttribute('class', 'esconder') em tudo que será escondido depois que apertar o botao
 
 /*
+** Tentei fazer a tabela
+*/
+
+const tabela = document.createElement("table")
+const tabelaBody = document.createElement("tbody")
+const trHeader = document.createElement("tr")
+const thNome = document.createElement("th")
+const thCosmo = document.createElement("th")
+
+thNome.innerText = 'Cavaleiro'
+thCosmo.innerText = 'Cosmo'
+
+tabelaBody.appendChild(trHeader)
+trHeader.appendChild(thNome)
+trHeader.appendChild(thCosmo)
+
+for (let i = 0; i < cavaleiros.length; i++){
+  const tblRow = document.createElement("tr")
+  const tblD = document.createElement("td")
+  tblD.innerText = cavaleiros[i].nome
+  const tblD1 = document.createElement("td")
+  tblD1.innerText = cavaleiros[i].cosmos
+
+  tblRow.appendChild(tblD)
+  tblRow.appendChild(tblD1)
+
+  tabelaBody.appendChild(tblRow)
+}
+
+tabela.appendChild(tabelaBody)
+document.body.appendChild(tabela)
+
+/*
 ** coloque aqui as tabela do mapa
 */
 const trocaTerreno = function trocaTerreno (e) {
