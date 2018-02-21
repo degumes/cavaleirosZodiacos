@@ -129,14 +129,3 @@ const desenharNaLista = function desenharNaLista () {
     return a
   }, document.createElement('ol')))
 }
-/*
-const desenharNaLista = function desenharNaLista () {
-  const ol = document.createElement('ol')
-  darwin[0].casas.forEach(el => {
-    const li = document.createElement('li')
-    li.innerText = el.reduce((a, b) => a + b.nome + ' ', '')
-    ol.appendChild(li)
-  })
-  document.body.appendChild(ol)
-}
-*/
