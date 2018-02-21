@@ -153,9 +153,9 @@ const andarNoMapa = function andarNoMapa () {
 }
 const desenharNoMapa = function desenharNoMapa () {
   caminhos[keyner(fim)].percurso.forEach(e => {
-    const span = document.createElement('span')
+    const span = document.createElement('div')
     span.setAttribute('class', 'caminho')
-    span.innerHTML = '&bull;'
+//    span.innerHTML = '&bull;'
     document.getElementById(keyner(e)).appendChild(span)
   })
 }
