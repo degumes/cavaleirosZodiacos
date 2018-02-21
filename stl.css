@@ -3,26 +3,58 @@
 }
 body {
   text-align: center;
+  background: rgb(234, 240, 241);
+  color: rgb(0, 0, 0)
 }
-table {
-	margin: 0 auto;
+
+#divMapa{
+  perspective: 800px;
 }
-td {
+#mapa {
+  margin: 0 auto;
+  border-spacing: 0px;
+  transform: rotateX(50deg); 
+  
+}
+td{
   width: 1em;
   height: 1em;
+  padding: 0px;
+  border: 1px solid rgba(255, 251, 251, 0.2);
+  
 }
 .m {
-  background: Black;
+  background: rgb(31, 11, 3);
+  
 }
 .r {
-  background: Gray;
+  background: rgb(73, 26, 7);
 }
 .p {
-  background: LightGray;
+  background: rgb(94, 32, 8);
 }
 .c {
-  background: Red;
+  background: rgb(184, 141, 0);
 }
-span.caminho {
-  color: Green;
+.caminho {
+  background: rgba(0, 128, 0, 0.411);
+  width: 100%;
+  height: 100%;
+}
+
+.cavaleiros {
+  position: absolute;
+  left: 100px;
+  top: 35%;
+}
+
+button {
+  background-color: rgb(158, 0, 0); /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }

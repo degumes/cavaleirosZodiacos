@@ -6,37 +6,24 @@
 // obs, use botao.setAttribute('class', 'esconder') em tudo que será escondido depois que apertar o botao
 
 /*
-** Tentei fazer a tabela
+** coloque aqui o botão start
 */
+const botao = document.createElement('button')
 
-const tabela = document.createElement("table")
-const tabelaBody = document.createElement("tbody")
-const trHeader = document.createElement("tr")
-const thNome = document.createElement("th")
-const thCosmo = document.createElement("th")
-
-thNome.innerText = 'Cavaleiro'
-thCosmo.innerText = 'Cosmo'
-
-tabelaBody.appendChild(trHeader)
-trHeader.appendChild(thNome)
-trHeader.appendChild(thCosmo)
-
-for (let i = 0; i < cavaleiros.length; i++){
-  const tblRow = document.createElement("tr")
-  const tblD = document.createElement("td")
-  tblD.innerText = cavaleiros[i].nome
-  const tblD1 = document.createElement("td")
-  tblD1.innerText = cavaleiros[i].cosmos
-
-  tblRow.appendChild(tblD)
-  tblRow.appendChild(tblD1)
-
-  tabelaBody.appendChild(tblRow)
+botao.onclick = function (el) {
+  for (let i = 0; i < document.getElementsByClassName('esconder').length; i++) {
+    document.getElementsByClassName('esconder')[i].setAttribute('style', 'display:none;')
+  }
+  setTimeout(() => {
+    andarNoMapa()
+    desenharNoMapa()
+    batalharNasCasas()
+    desenharNaLista()
+    imprimeSomaTempo()
+  }, 0)
 }
-
-tabela.appendChild(tabelaBody)
-document.body.appendChild(tabela)
+botao.innerText = 'começar a jornada'
+document.body.appendChild(botao)
 
 /*
 ** coloque aqui as tabela do mapa
@@ -57,8 +44,10 @@ const trocaTerreno = function trocaTerreno (e) {
     break
   }
 }
-
+const div1 = document.createElement('div')
+div1.setAttribute("id","divMapa")
 const table = document.createElement('table')
+table.setAttribute("id","mapa")
 const tbody = document.createElement('tbody')
 for (let i = 0; i < mapa.length; i++) {
   const tr = document.createElement('tr')
@@ -73,24 +62,60 @@ for (let i = 0; i < mapa.length; i++) {
   tbody.appendChild(tr)
 }
 table.appendChild(tbody)
-document.body.appendChild(table)
+div1.appendChild(table)
+document.body.appendChild(div1)
 
 /*
-** coloque aqui o botão start
+** Tentei fazer a tabela
 */
-const botao = document.createElement('button')
-botao.setAttribute('class', 'esconder')
-botao.onclick = function (el) {
-  for (let i = 0; i < document.getElementsByClassName('esconder').length; i++) {
-    document.getElementsByClassName('esconder')[i].setAttribute('style', 'display:none;')
-  }
-  setTimeout(() => {
-    andarNoMapa()
-    desenharNoMapa()
-    batalharNasCasas()
-    desenharNaLista()
-    imprimeSomaTempo()
-  }, 0)
+
+const div = document.createElement("div")
+div.setAttribute("class","cavaleiros")
+const tabela = document.createElement("table")
+const tabelaBody = document.createElement("tbody")
+const trHeader = document.createElement("tr")
+const thNome = document.createElement("th")
+const thCosmo = document.createElement("th")
+
+thNome.innerText = 'Cavaleiro'
+thCosmo.innerText = 'Cosmo'
+
+tabelaBody.appendChild(trHeader)
+trHeader.appendChild(thNome)
+trHeader.appendChild(thCosmo)
+
+for (let i = 0; i < cavaleiros.length; i++){
+  const tblRow = document.createElement("tr")
+  const tblD = document.createElement("td")
+  tblD.innerText = cavaleiros[i].nome
+  const tblD1 = document.createElement("input")
+  const range = document.createElement("td")
+  range.setAttribute("id", "range"+cavaleiros[i].nome)
+  tblD1.setAttribute("type","range")
+  tblD1.setAttribute("id", cavaleiros[i].nome)
+  tblD1.setAttribute("max", "10")
+  tblD1.setAttribute("min", "1")
+  tblD1.setAttribute("step", ".1")
+  tblD1.setAttribute("value",cavaleiros[i].cosmos)
+  tblD1.setAttribute("oninput", "showVal(this.value,this.id)")
+  range.innerHTML = tblD1.value
+  tblRow.appendChild(tblD)
+  tblRow.appendChild(tblD1)
+  tblRow.appendChild(range)
+
+  tabelaBody.appendChild(tblRow)
 }
-botao.innerText = 'começar a jornada'
-document.body.appendChild(botao)
+
+tabela.appendChild(tabelaBody)
+div.appendChild(tabela)
+document.body.appendChild(div)
+
+function showVal(newVal,id){
+  document.getElementById("range"+id).innerText = newVal
+  for(let i = 0; i < cavaleiros.length; i++){
+    if(id == cavaleiros[i].nome){
+      cavaleiros[i].cosmos = +newVal
+    }
+  }
+
+}
