@@ -23,7 +23,7 @@ botao.onclick = function (el) {
   }, 0)
 }
 botao.innerText = 'começar a jornada'
-div.setAttribute("class","esconder")
+botao.setAttribute("class","esconder")
 document.body.appendChild(botao)
 
 /*
