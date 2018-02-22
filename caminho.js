@@ -1,3 +1,7 @@
+/*
+** variável contendo o mapa inicial
+** 42x42
+*/
 const mapa = [
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
   ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
@@ -46,7 +50,11 @@ const mapa = [
 const inicio = [37, 37]
 const fim = [4, 37]
 
-// https://github.com/nolanlawson/tiny-queue
+/*
+** implementação de fila
+** retiarado de  https://github.com/nolanlawson/tiny-queue
+** se usar pilha acontece uma busca em profundidade
+*/
 const Queue = function Queue () {
   this.length = 0
 }
@@ -69,7 +77,12 @@ Queue.prototype.shift = function () {
     return node.item
   }
 }
-
+/*
+** encontra os elementos adjacentes da matriz
+** vizinhos de M[2][2] são M[1][2] M[3][2] M[2][1] M[2][3]
+** a menos se a célula estiver na borda
+** NÂO CONSIDERA MONTANHOSO
+*/
 const proximos = function proximos ([i, j]) {
   const proximos = []
   let vz
@@ -100,6 +113,13 @@ const proximos = function proximos ([i, j]) {
   return proximos
 }
 
+/*
+** transforma os códigos do mapa em dificuldades do caminho.
+** casas dificuldade 0
+** p = plano = 1
+** r = rochoso = 5
+**
+*/
 const tamanho = function tamanho ([i, j]) {
   const t = mapa[i][j]
   if (isFinite(t)) {
@@ -113,9 +133,16 @@ const tamanho = function tamanho ([i, j]) {
   }
 }
 
+/* função auxiliar para gerar string ID
+** keyner(inicio) -> '[37,37]'
+*/
 const keyner = function keyner ([i, j]) {
   return `[${i},${j}]`
 }
+
+/*
+** Inicia a fila com a célula de inínio
+*/
 const fila = new Queue()
 fila.push(inicio)
 const caminhos = {}
@@ -123,34 +150,58 @@ caminhos[keyner(inicio)] = {
   distancia: 0,
   percurso: [inicio]
 }
+/*
+** #######################
+** # ESTRUTURA PRINCIPAL #
+** #######################
+**
+** caminhos = {
+** '[37,37]': {
+**     distancia: 0,
+**     percurso: [[37,37]]
+**   },
+**   '[36,37]': {
+**     distancia: 1,
+**     percurso: [[37,37], [36,37]]
+**   }
+** }
+*/
 
+/*
+** #######################
+** # ALGORITMO PRINCIPAL #
+** #######################
+*/
 const andarNoMapa = function andarNoMapa () {
+  // enquanto a fila não estiver vazia
   while (fila.length > 0) {
-    let noIJ = fila.shift()
+    let noIJ = fila.shift() // pegue um da fila
     let no = caminhos[keyner(noIJ)]
-    for (const p of proximos(noIJ)) {
+    for (const p of proximos(noIJ)) { // peque todos os vizinhos deste retirado da fila
       const strp = keyner(p)
       const tamp = tamanho(p)
-      if (Object.keys(caminhos).includes(strp)) {
-        if (caminhos[strp].distancia > no.distancia + tamp) {
-          caminhos[strp] = {
+      if (Object.keys(caminhos).includes(strp)) { // se o vizinho já estiver no 'caminhos'
+        if (caminhos[strp].distancia > no.distancia + tamp) { // se o caminho anterior foi maior
+          caminhos[strp] = { // atualiza o caminho com o caminho atual
             distancia: no.distancia + tamp,
             percurso: no.percurso.slice()
           }
           caminhos[strp].percurso.push(p)
-          fila.push(p)
+          fila.push(p) // insere o vizinho na fila
         }
-      } else {
+      } else { // se não estiver no caminhos, atualiza com o caminho original
         caminhos[strp] = {
           distancia: no.distancia + tamp,
           percurso: no.percurso.slice()
         }
         caminhos[strp].percurso.push(p)
-        fila.push(p)
+        fila.push(p) // insere o vizinho na fila
       }
     }
   }
 }
+
+// insere span verdes no menor caminho até o fim.
 const desenharNoMapa = function desenharNoMapa () {
   caminhos[keyner(fim)].percurso.forEach(e => {
     const span = document.createElement('div')
