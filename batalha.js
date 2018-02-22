@@ -34,7 +34,7 @@ const casas = [
   [cavaleiros[1]],
   [cavaleiros[1]],
   [cavaleiros[0]],
-  [cavaleiros[0]]// casa 11
+  [cavaleiros[0]]// casa 13
 ]
 
 const dificuldadeCasas = [
@@ -53,6 +53,11 @@ const dificuldadeCasas = [
   0
 ]
 
+/*
+** #######################
+** # ALGORITMO PRINCIPAL #
+** #######################
+*/
 const moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
   let casaOrigem
   // a origem não pode ser uma casa com apenas 1 cavaleiro
@@ -66,12 +71,14 @@ const moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
     casas[casaDestino = Math.floor(casas.length * Math.random())].find(el => el === casas[casaOrigem][cavaleiroOrigem]) ||
     casas[casaDestino].length === 5);
 
-  // console.log(`casas[${casaOrigem}][${cavaleiroOrigem}] --> casas[${casaDestino}]`)
-
+  // casa de origem sem o cavaleiro escolhido
   const origenFiltrada = casas[casaOrigem].filter((el, idx) => idx !== cavaleiroOrigem)
+
+  // casa de destino com o cavaleiro de destino
   const novoDestino = casas[casaDestino].slice()
   novoDestino.push(casas[casaOrigem][cavaleiroOrigem])
 
+  // retorna a nova configuração de batalha
   return casas.map((el, idx) => {
     if (idx === casaOrigem) {
       return origenFiltrada
@@ -87,6 +94,20 @@ const tempoBatalha = function tempoBatalha (casas) {
   return casas.reduce((a, b, i) => a + dificuldadeCasas[i] / b.reduce((a, b) => a + b.cosmos, 0), 0)
 }
 
+/*
+** os 5 melhores configurações de batalha
+** inicialmente 5 qualquer
+darwin = [
+  {
+    tempoBatalha: 667,
+    casas: [[cavaleiros],[],[],[],[],[],[],[],[],[],[],[]]
+  },
+  {},
+  {},
+  {},
+  {}
+]
+*/
 let darwin = []
 for (let i = 0; i < 5; i++) {
   const casasAcc = moveCavaleiroRandom(casas)
@@ -98,20 +119,31 @@ for (let i = 0; i < 5; i++) {
 }
 darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
 
+/*
+** ######################
+** # ALGORITMO GENéTICO #
+** ######################
+*/
 const batalharNasCasas = function batalharNasCasas () {
+  // enquanto o tempo do primeiro for diferente do tempo do ultimo
   while (darwin[0].tempoBatalha !== darwin[4].tempoBatalha) {
     for (let i = 0; i < 5; i++) {
+      // mutação no i-ésimo
       const gen1 = moveCavaleiroRandom(darwin[i].casas)
       for (let j = 0; j < 150; j++) {
+        // faça 150 vezes uma segunda mutação no i-ésimo
         const casasAcc = moveCavaleiroRandom(gen1)
         const tempoBatalhaAcc = tempoBatalha(casasAcc)
+        // insira no darwin
         darwin.push({
           tempoBatalha: tempoBatalhaAcc,
           casas: casasAcc
         })
       }
     }
+    // ordene o darwin crescente no tempoBatalha
     darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+    // peque os 5 melhores
     darwin = darwin.slice(0, 5)
   }
 }
