@@ -23,6 +23,7 @@ botao.onclick = function (el) {
   }, 0)
 }
 botao.innerText = 'começar a jornada'
+botao.setAttribute("class","esconder")
 document.body.appendChild(botao)
 
 /*
@@ -70,7 +71,8 @@ document.body.appendChild(div1)
 */
 
 const div = document.createElement("div")
-div.setAttribute("class","cavaleiros")
+div.setAttribute("id","cavaleiros")
+div.setAttribute("class","esconder")
 const tabela = document.createElement("table")
 const tabelaBody = document.createElement("tbody")
 const trHeader = document.createElement("tr")
