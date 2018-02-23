@@ -127,6 +127,7 @@ function showVal (newVal, id) {
 
 const divisor = document.createElement('div')
 divisor.setAttribute('id', 'casas')
+divisor.setAttribute('class', 'esconder')
 const tabela2 = document.createElement('table')
 const tabela2Body = document.createElement('tbody')
 const trHeader2 = document.createElement('tr')
@@ -149,9 +150,9 @@ for (let i = 0; i < dificuldadeCasas.length-1; i++) {
   range2.setAttribute('id', 'range' + (i))
   tblD2.setAttribute('type', 'range')
   tblD2.setAttribute('id', i)
-  tblD2.setAttribute('max', '1000')
-  tblD2.setAttribute('min', '0')
-  tblD2.setAttribute('step', '5')
+  tblD2.setAttribute('max', '150')
+  tblD2.setAttribute('min', '15')
+  tblD2.setAttribute('step', '1')
   tblD2.setAttribute('value', dificuldadeCasas[i])
   tblD2.setAttribute('oninput', 'showVal2(this.value,this.id)')
   range2.innerHTML = tblD2.value
@@ -168,9 +169,5 @@ document.body.appendChild(divisor)
 
 function showVal2 (newVal, id) {
   document.getElementById('range' + id).innerText = newVal
-  for (let i = 0; i < dificuldadeCasas.length-1; i++) {
-    if (id == i) {
-      dificuldadeCasas[i] = +newVal
-    }
-  }
+      dificuldadeCasas[id] = Number(newVal)
 }
