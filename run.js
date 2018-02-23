@@ -150,7 +150,7 @@ for (let i = 0; i < dificuldadeCasas.length-1; i++) {
   range2.setAttribute('id', 'range' + (i))
   tblD2.setAttribute('type', 'range')
   tblD2.setAttribute('id', i)
-  tblD2.setAttribute('max', '150')
+  tblD2.setAttribute('max', '1000')
   tblD2.setAttribute('min', '15')
   tblD2.setAttribute('step', '1')
   tblD2.setAttribute('value', dificuldadeCasas[i])

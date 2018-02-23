@@ -54,9 +54,9 @@ const dificuldadeCasas = [
 ]
 
 /*
-** #######################
-** # ALGORITMO PRINCIPAL #
-** #######################
+** ########################
+** # ALGORITMO DA MUTAÇÃO #
+** ########################
 */
 const moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
   let casaOrigem
@@ -77,6 +77,8 @@ const moveCavaleiroRandom = function moveCavaleiroRandom (casas) {
   // casa de destino com o cavaleiro de destino
   const novoDestino = casas[casaDestino].slice()
   novoDestino.push(casas[casaOrigem][cavaleiroOrigem])
+
+  // console.log(`${casaOrigem} -> ${casaDestino}`)
 
   // retorna a nova configuração de batalha
   return casas.map((el, idx) => {
@@ -108,28 +110,38 @@ darwin = [
   {}
 ]
 */
-let darwin = []
-for (let i = 0; i < 5; i++) {
-  const casasAcc = moveCavaleiroRandom(casas)
-  const tempoBatalhaAcc = tempoBatalha(casasAcc)
-  darwin.push({
-    tempoBatalha: tempoBatalhaAcc,
-    casas: casasAcc
-  })
-}
-darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
 
 /*
 ** ######################
 ** # ALGORITMO GENéTICO #
 ** ######################
 */
+let darwin = []
+let min = 10
+let max = 1000
+let delta = 0.1
 const batalharNasCasas = function batalharNasCasas () {
+  let count = 0
+  // inicia o darwin com 5 elementos
+  for (let i = 0; i < 5; i++) {
+    const casasAcc = moveCavaleiroRandom(casas)
+    const tempoBatalhaAcc = tempoBatalha(casasAcc)
+    darwin.push({
+      tempoBatalha: tempoBatalhaAcc,
+      casas: casasAcc
+    })
+  }
+  darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
   // enquanto o tempo do primeiro for diferente do tempo do ultimo
-  while (darwin[0].tempoBatalha !== darwin[4].tempoBatalha) {
+  while (count < min || count < max &&  darwin[4].tempoBatalha - darwin[0].tempoBatalha > delta) {
     for (let i = 0; i < 5; i++) {
       // mutação no i-ésimo
       const gen1 = moveCavaleiroRandom(darwin[i].casas)
+      const gen1Tempo = tempoBatalha(gen1)
+      darwin.push({
+        tempoBatalha: gen1Tempo,
+        casas: gen1
+      })
       for (let j = 0; j < 150; j++) {
         // faça 150 vezes uma segunda mutação no i-ésimo
         const casasAcc = moveCavaleiroRandom(gen1)
@@ -143,8 +155,11 @@ const batalharNasCasas = function batalharNasCasas () {
     }
     // ordene o darwin crescente no tempoBatalha
     darwin.sort((a, b) => a.tempoBatalha - b.tempoBatalha)
+    // retire os duplicados
+    darwin = darwin.filter((e, i, l) => i === 0 || e.tempoBatalha !== l[i - 1].tempoBatalha)
     // peque os 5 melhores
     darwin = darwin.slice(0, 5)
+    count++
   }
 }
 
@@ -161,3 +176,24 @@ const desenharNaLista = function desenharNaLista () {
     return a
   }, document.createElement('ol')))
 }
+/*
+var gen1
+var gen1Tempo
+var casasAcc
+var tempoBatalhaAcc
+
+gen1 = moveCavaleiroRandom(darwin[0].casas)
+gen1Tempo = tempoBatalha(gen1)
+darwin.push({
+  tempoBatalha: gen1Tempo,
+  casas: gen1
+})
+
+casasAcc = moveCavaleiroRandom(gen1)
+tempoBatalhaAcc = tempoBatalha(casasAcc)
+darwin.push({
+  tempoBatalha: tempoBatalhaAcc,
+  casas: casasAcc
+})
+
+*/
