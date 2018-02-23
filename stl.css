@@ -16,7 +16,7 @@ body {
   transform: rotateX(50deg);
 
 }
-td{
+.m, .r, .p, .c{
   width: 1em;
   height: 1em;
   padding: 0px;
@@ -24,14 +24,14 @@ td{
 
 }
 .m {
-  background: rgb(31, 11, 3);
+  background: rgb(0, 0, 0);
 
 }
 .r {
-  background: rgb(73, 26, 7);
+  background: rgb(87, 87, 87);
 }
 .p {
-  background: rgb(94, 32, 8);
+  background: rgb(167, 173, 167);
 }
 .c {
   background: rgb(184, 141, 0);
@@ -45,13 +45,20 @@ td{
 #cavaleiros {
   position: absolute;
   left: 100px;
-  top: 35%;
+  top: 100px;
+}
+
+#casas {
+  position: absolute;
+  right: 100px;
+  top: 100px;
 }
 
 button {
   background-color: rgb(158, 0, 0); /* Green */
   border: none;
   color: white;
+  margin: 50px 0px 0px 0px;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
