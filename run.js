@@ -120,3 +120,54 @@ function showVal (newVal, id) {
     }
   }
 }
+
+/*
+** Tentei fazer a tabela 2.0
+*/
+
+const divisor = document.createElement('div')
+divisor.setAttribute('id', 'casas')
+divisor.setAttribute('class', 'esconder')
+const tabela2 = document.createElement('table')
+const tabela2Body = document.createElement('tbody')
+const trHeader2 = document.createElement('tr')
+const thCasa2 = document.createElement('th')
+const thDificuldade2 = document.createElement('th')
+
+thCasa2.innerText = 'Casa'
+thDificuldade2.innerText = 'Dificuldade'
+
+tabela2Body.appendChild(trHeader2)
+trHeader2.appendChild(thCasa2)
+trHeader2.appendChild(thDificuldade2)
+
+for (let i = 0; i < dificuldadeCasas.length-1; i++) {
+  const tblRow1 = document.createElement('tr')
+  const tblD1 = document.createElement('td')
+  tblD1.innerText = i+1
+  const tblD2 = document.createElement('input')
+  const range2 = document.createElement('td')
+  range2.setAttribute('id', 'range' + (i))
+  tblD2.setAttribute('type', 'range')
+  tblD2.setAttribute('id', i)
+  tblD2.setAttribute('max', '150')
+  tblD2.setAttribute('min', '15')
+  tblD2.setAttribute('step', '1')
+  tblD2.setAttribute('value', dificuldadeCasas[i])
+  tblD2.setAttribute('oninput', 'showVal2(this.value,this.id)')
+  range2.innerHTML = tblD2.value
+  tblRow1.appendChild(tblD1)
+  tblRow1.appendChild(tblD2)
+  tblRow1.appendChild(range2)
+
+  tabela2Body.appendChild(tblRow1)
+}
+
+tabela2.appendChild(tabela2Body)
+divisor.appendChild(tabela2)
+document.body.appendChild(divisor)
+
+function showVal2 (newVal, id) {
+  document.getElementById('range' + id).innerText = newVal
+      dificuldadeCasas[id] = Number(newVal)
+}
